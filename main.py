@@ -1,3 +1,4 @@
+import random
 import re, socket
 
 
@@ -9,10 +10,17 @@ class Endpoints:
 
 
 def do_things(id, ip, port, endpoints_array):
+    print(len(endpoints_array))
     print(f"Doing things with endpoint {id}")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(('localhost', port))
     server_socket.listen(1)
+
+    different_endpoints = []
+    # create 3 different random numbers
+    candidates = [num for num in range(1, len(endpoints_array)+1) if num != id]
+    unique_numbers = random.sample(candidates, 3)
+    print(unique_numbers)
 
     print(f"Server is listening on port {port}")
 
