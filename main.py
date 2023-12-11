@@ -18,9 +18,15 @@ def do_things(id, ip, port, endpoints_array):
 
     different_endpoints = []
     # create 3 different random numbers
-    candidates = [num for num in range(1, len(endpoints_array)+1) if num != id]
+    candidates = [num for num in range(1, len(endpoints_array) + 1) if num != id]
     unique_numbers = random.sample(candidates, 3)
     print(unique_numbers)
+    for endpoints in endpoints_array:
+        if endpoints.id in unique_numbers:
+            different_endpoints.append(endpoints)
+
+    for endpoint in different_endpoints:
+        print(f"{endpoint.id}\t{endpoint.ip}\t{endpoint.port}")
 
     print(f"Server is listening on port {port}")
 
