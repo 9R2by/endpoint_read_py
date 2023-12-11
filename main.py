@@ -25,7 +25,8 @@ def server_function(port):
         if not data:
             break
         print(f"Received data: {data.decode('utf-8')}")
-        connection.sendall(b"Hello, client! I received your message.")
+        # connection.sendall(b"Hello, client! I received your message.")
+        # test
         connection.close()
 
 
