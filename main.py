@@ -1,5 +1,6 @@
 import random
-import re, socket
+import re
+import socket
 
 
 class Endpoints:
