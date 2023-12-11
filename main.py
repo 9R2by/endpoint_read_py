@@ -26,6 +26,5 @@ if __name__ == "__main__":
     file_path = 'endpoints.txt'
     endpoints_array = read_file_and_create_objects(file_path)
 
-    # Print the result
     for endpoint in endpoints_array:
         print(f"{endpoint.id}\t{endpoint.ip}\t{endpoint.port}")
