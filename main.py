@@ -2,7 +2,8 @@ import multiprocessing
 import random
 import re
 import socket
-
+from time import sleep
+import datetime
 
 class Endpoints:
     def __init__(self, id, ip, port):
@@ -11,8 +12,7 @@ class Endpoints:
         self.port = port
 
 
-def local_node(port):
-
+def local_node():
     file_path = 'endpoints.txt'
     endpoints_array = read_file_and_create_objects(file_path)
     for endpoint in endpoints_array:
@@ -41,12 +41,21 @@ def local_node(port):
         if not data:
             break
         print(f"Received data: {data.decode('utf-8')}")
-        # connection.sendall(b"Hello, client! I received your message.")
-        # test
+        ct = datetime.datetime.now()
+        print("current time:-", ct)
         connection.close()
 
 
-def neighbor_nodes(port, server_port):
+def neighbor_nodes():
+    sleep(5)
+    print(f"Starting neighbor nodes")
+    file_path = 'endpoints.txt'
+    endpoints_array = read_file_and_create_objects(file_path)
+    for endpoint in endpoints_array:
+        print(f"{endpoint.id}\t{endpoint.ip}\t{endpoint.port}")
+
+    # for ports in x try catch if port is already in use and create new process else abort process
+
     print(f"Starting node on port {port}")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('localhost', int(server_port)))
@@ -55,24 +64,6 @@ def neighbor_nodes(port, server_port):
     client_socket.close()
 
 
-def workers(server_port, ports_arr):
-    print("Starting servers and clients")
-    processes = []
-
-    server = multiprocessing.Process(target=server_function, args=(server_port,))
-    processes.append(server)
-    server.start()
-
-    print("test")
-
-    for port in ports_arr:
-        client = multiprocessing.Process(target=client_function, args=(port, server_port,))
-        # client = multiprocessing.Process(target=client_function, args=(server_port,))
-        processes.append(client)
-        client.start()
-
-    for process in processes:
-        process.join()
 
 
 def do_things(id, ip, port, endpoints_array):
@@ -114,5 +105,22 @@ def read_file_and_create_objects(file_path):
 if __name__ == "__main__":
     # start process of local node
     # start process of starting neighbor nodes
+    # port occupation check and error handling
+    # instead of port removal do stateless check of port occupation
+    # and assign only those where not error is on localhost
 
-    
+    print("Starting local and neighboring nodes")
+    processes = []
+
+    local_node = multiprocessing.Process(target=local_node)
+    processes.append(local_node)
+    local_node.start()
+
+    # move this into the neighbor nodes function
+    neighbor_nodes = multiprocessing.Process(target=neighbor_nodes)
+    # client = multiprocessing.Process(target=client_function, args=(server_port,))
+    processes.append(neighbor_nodes)
+    neighbor_nodes.start()
+
+    for process in processes:
+        process.join()
