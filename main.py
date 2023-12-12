@@ -12,7 +12,7 @@ class Endpoints:
 
 
 def server_function(port):
-    print(f"Server is listening on port {port}")
+    print(f"Starting local node on port {port}")
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(('localhost', port))
@@ -31,7 +31,7 @@ def server_function(port):
 
 
 def client_function(port, server_port):
-    print(f"Starting worker on port {port}")
+    print(f"Starting node on port {port}")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('localhost', int(server_port)))
     message = "test 123"
