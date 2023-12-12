@@ -11,7 +11,23 @@ class Endpoints:
         self.port = port
 
 
-def server_function(port):
+def local_node(port):
+
+    file_path = 'endpoints.txt'
+    endpoints_array = read_file_and_create_objects(file_path)
+    for endpoint in endpoints_array:
+        print(f"{endpoint.id}\t{endpoint.ip}\t{endpoint.port}")
+
+
+    user_input = input("Enter a unique id: ")
+    if len(endpoints_array) < 4:
+        print("Not enough endpoints")
+    else:
+        for endpoint in endpoints_array:
+            if endpoint.id == int(user_input):
+                do_things(endpoint.id, endpoint.ip, endpoint.port, endpoints_array)
+
+
     print(f"Starting local node on port {port}")
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -30,7 +46,7 @@ def server_function(port):
         connection.close()
 
 
-def client_function(port, server_port):
+def neighbor_nodes(port, server_port):
     print(f"Starting node on port {port}")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('localhost', int(server_port)))
@@ -96,15 +112,7 @@ def read_file_and_create_objects(file_path):
 
 
 if __name__ == "__main__":
-    file_path = 'endpoints.txt'
-    endpoints_array = read_file_and_create_objects(file_path)
-    for endpoint in endpoints_array:
-        print(f"{endpoint.id}\t{endpoint.ip}\t{endpoint.port}")
+    # start process of local node
+    # start process of starting neighbor nodes
 
-    user_input = input("Enter a unique id: ")
-    if len(endpoints_array) < 4:
-        print("Not enough endpoints")
-    else:
-        for endpoint in endpoints_array:
-            if endpoint.id == int(user_input):
-                do_things(endpoint.id, endpoint.ip, endpoint.port, endpoints_array)
+    
